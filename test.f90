@@ -5,30 +5,21 @@ PROGRAM SCHROD
     REAL (KIND=8), DIMENSION(0:N):: V,F,RR 
     REAL (KIND=8):: R0,RN,A,B,EPS,TOL,FINIT,ENERG,H,HC,E,DE, LOOP_ENERGY
     character(len=2) :: str_node
-    integer :: bulk = 0
+    integer :: plot = 0
     REAL (KIND=8):: cpt = 0.0
 
-    ENERG=-0.96D0
-
-    ENERG = ENERG - 0.005
-
-    97 CONTINUE
-    DATA R0/0.01D0/,     &! r_0
-        RN/4.0D0/,      &! r_N
+    DATA R0/0.01D0/,    &! r_0
+        RN/17.0D0/,     &! r_N
         A/1.3924/,      &! a
         B/1.484D-03/,   &! b
         EPS/1.0D-04/,   &! \epsilon
         TOL/1.0D-04/,   &! \tau
         FINIT/0.D0/,    &!
-        !ENERG/-0.96D0/, &!
+        ENERG/-0.85D0/, &!
         NCMAX/30/,      &!
         IFLAG/1/,       &!
         M/11/,          &!
-        JLEV/0/ 
-
-    ENERG = ENERG + 0.005
-    !RN = 2.6D0 + cpt * 0.3
-    !cpt = cpt + 1
+        JLEV/0/
     
     H=(RN-R0)/DFLOAT(N)  ! calculation of the step: 
     HC=H*H/B ! expression h2/b 
@@ -52,25 +43,15 @@ PROGRAM SCHROD
     write (str_node, "(I2)") NODE
     !write(str_node,'(I5)') NODE
     print *, trim(str_node)
-    IF(bulk == 1) THEN
-        OPEN(UNIT=1,FILE="results/Wavefunction_" // str_node // ".txt") 
-    ELSE
-        OPEN(UNIT=1,FILE="results/Wavefunction.txt") 
-    ENDIF
+    OPEN(UNIT=1,FILE="results/Wavefunction.txt")
     
     DO I=0,N
         WRITE(1,100) RR(I),F(I) 
         100 FORMAT(2E15.7) 
     ENDDO 
     CLOSE(1)
-    
-    IF(bulk == 1) THEN
-        IF(ENERG <= 0.01) THEN
-            GOTO 97
-        ELSE
-            call execute_command_line('python3 plot_psy.py bulk')
-        ENDIF
-    ELSE 
+ 
+    IF(plot == 1) THEN
         call execute_command_line('python3 plot_psy.py')
     ENDIF
 
@@ -114,16 +95,20 @@ SUBROUTINE SHOOT(N,A,H,HC,FINIT,EPS,E,V,F,NODE,DE,M,IFLAG)
     CALL PROPAG(N,HC,ISTEP,IINIT,IFIN,IFLAG,F0,F1,E,V,F,M) 
     COEFF=F(M)/FM 
     DO I=0,M-1 
-        F(I)=F(I)*COEFF 
+        F(I)=F(I)*COEFF
+        print *, "F(I) = ", F(I), "I = ", I
     ENDDO 
     NODE=0 ! calculation of nodes: 
     AN=0.D0 ! calculation of the norm for the wavefunction 
     DO I=1,N ! F0=0 
         AN=AN+F(I)*F(I) 
+        print *, "AN = ", AN, "I = ", I
         IF(F(I)*F(I-1).LT.0.D0) NODE=NODE+1 
     ENDDO 
+    print *, "AN = ", AN
     FSM=F(M+1)+F(M-1)-2.D0*F(M)  ! correction of the energy: 
     DE=F(M)*((V(M)-E)*F(M)-FSM/HC)/AN 
+    print *, "DE = ", DE
     RETURN 
 END 
      

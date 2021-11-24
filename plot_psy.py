@@ -1,4 +1,4 @@
-from bokeh.plotting import figure, show
+from bokeh.plotting import figure, show, output_file
 import bokeh
 from numpy import *
 
@@ -36,11 +36,7 @@ if listfile == []:
 color=["red","orange","yellow","green","blue","purple","pink"]
 for i, filename in enumerate(listfile):
     p = figure(title="Wavefunction", sizing_mode="stretch_both", y_axis_label='Psy (r)', x_axis_label='r')
-
-    if filename == "results/Wavefunction.txt":
-        node = "v=unknown"
-    else:
-        node = "v=" + filename.replace(" ","").replace("results/Wavefunction_","").replace(".txt","")
+    
     line_color = color[i%7]
     x = None
     y = None
@@ -64,7 +60,11 @@ for i, filename in enumerate(listfile):
             N += 1
         
     #, sizing_mode="stretch_both", height=800
-    p.line(x, y, legend_label=node, line_color="red", line_width=2)
+    if filename == "results/Wavefunction.txt":
+        p.line(x, y, line_color="red", line_width=2)
+    else:
+        p.line(x, y, legend_label="v=" + filename.replace(" ","").replace("results/Wavefunction_","").replace(".txt",""), line_color="red", line_width=2)
     #color[i%7]
     bokeh.io.save(p)
+    output_file(filename="wavefunction_plotted.html")
     show(p)
