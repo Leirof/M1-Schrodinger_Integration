@@ -36,7 +36,7 @@ $$
 
 # Computation
 
-## 1) Determine numerically the vibrational energies and compare them to the theoretical values issued from the Morse potential.
+## Question 1
 
 While trying to run the program with $e <= -0.97$, I obtain wrong convergeance. With upper starting energy, I converge to good vibrational levels:
 
@@ -64,7 +64,7 @@ While trying to run the program with $e <= -0.97$, I obtain wrong convergeance. 
 >
 > I increased the starting energy from $0.005$, so the program converge to $v=0$ from $e=-0.96$ to $e=-0.90$
 
-## 2) For v = 0 and v = 1, study the variation of the number of iterations in function of the “distance” of the guess value from the finally found eigenvalue.
+## Question 2
 
 
 | Starting energy | v | v energy | Iterations |
@@ -95,7 +95,7 @@ So, if I plot these data, on v=0, the evolution of the number of iteration is no
 | ---------------------------------- | ---------------------------------- |
 | ![](images/iteration_for_v0.png) | ![](images/iteration_for_v1.png) |
 
-## 3) Study the influence of r0, rN , N, ε and τ on the number of iterations and the exactness of the result for v = 0 and for an highly excited vibrational level (at least v = 10).
+## 3Question 3
 
 I will analyse the influence of these parameters by starting from 2 differents energies:
 
@@ -171,7 +171,7 @@ In order to have a huge amount of iteration, I use -0.78 as starting energy
 
 The results are not at all what I expected, but it appear that I misunderstood the role of $\epsilon$. I thook it was a precision parameter, but it is actually just a value that is used to increase the wavefunction when we start to make the shooting method. So, giving that fact that we make the wave propagate from the 2 sides and we normalize it after with a coefficient that allow to perfrectly match the 2 propagations, at the end, the epsilon coefficient does not change anything. It only change the flatnesse of the wave that is drawed by the shooting methode before the normalisation. So in the end, we can see that this coefficient as no effect here.
 
-## 4) To understand the reason, plot a graph of variation of $\delta e$ as a function of $e$ for e
+## Question 4
 
 Theoritically, we expect this behavior:
 
@@ -186,3 +186,5 @@ We retrieve the oscillation that are decresing in amplitude in function of $e$. 
 We can also see that ths intersection correspond to the energy of the vibrational levels. For exemple, here is the first node, that have an energy of $-0.9473$:
 
 ![](images/4-hover.png)
+
+## Question 5
