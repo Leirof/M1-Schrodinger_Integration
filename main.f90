@@ -4,12 +4,12 @@ program schro
     INTEGER (KIND=4), PARAMETER :: N=50
     INTEGER (KIND=4):: NCMAX, IFLAG, M, JLEV, NCOUNT, NODE,I 
     REAL (KIND=8), DIMENSION(0:N):: V,F,RR !! potential ; wave function ; abscissae
-    REAL (KIND=8):: R0,RN,A,B,EPS,TOL,FINIT,ENERG,H,HC,E,DE 
+    REAL (KIND=8):: R0,RN,A,B,EPS,TOL,FINIT,ENERG,H,HC,E,DE,step
     REAL :: plot = 1
     
     ! initialize the data
     DATA R0/0.1D0/, RN/2.6D0/, a/1.3924/, b/1.484D-03/, EPS/1.0D-10/, TOL/1.0D-04/,& 
-            FINIT/0.D0/, ENERG/-0.78D0/, NCMAX/30/, IFLAG/1/, M/11/, JLEV/0/ 
+            FINIT/0.D0/, ENERG/-0.60D0/, NCMAX/30/, IFLAG/1/, M/11/, JLEV/0/ 
 
     H=(RN-R0)/DFLOAT(N)  ! calculation of the step:
     HC=H*H/B ! expression h2/b !!just a constant to compute the wave function
@@ -28,12 +28,27 @@ program schro
     !! loop : shoot again as long as ABS(DE/E).GT.TOL (see the last IF)
     3 CONTINUE
 
-    ! propagation; NCOUNT giving the number of iterations: 
-    CALL SHOOT(N,HC,FINIT,EPS,E,V,F,NODE,DE,M,IFLAG) 
-    NCOUNT=NCOUNT+1 
+    ! propagation; NCOUNT giving the number of iterations:
     
+    OPEN(UNIT=98,FILE="results/de_variation.dat")
+    ENERG = -0.98D0
+    do i=0,580
+        step = 1.0 / 1000.0
+        E = ENERG + step * i
+        print *, E
+        CALL SHOOT(N,HC,FINIT,EPS,E,V,F,NODE,DE,M,IFLAG) 
+        WRITE(98,99) E, DE
+        99 FORMAT(2E15.7) 
+    enddo
+    stop
+
+    !CALL SHOOT(N,HC,FINIT,EPS,E,V,F,NODE,DE,M,IFLAG) 
+    NCOUNT=NCOUNT+1 
+
     WRITE(*,200) NCOUNT, E, M, DE, NODE 
-    200 FORMAT(I4,5X, E15.7,I4,E15.7,I4) 
+    200 FORMAT(I4,5X, E15.7,I4,E15.7,I4)
+
+    
 
     !! if we did the max nb of iteration, go the 999 (line 45) :
     IF(NCOUNT.GT.NCMAX) GOTO 999
@@ -53,7 +68,7 @@ program schro
     CLOSE(1) 
 
     IF(plot == 1) THEN
-        call execute_command_line('python3 plot_psy.py')
+        call execute_command_line('python3 plot.py')
     ENDIF
 
     STOP

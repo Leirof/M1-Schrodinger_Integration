@@ -1,5 +1,6 @@
 from bokeh.plotting import figure, show, output_file
 import bokeh
+import bokeh.models as pltm
 from numpy import *
 
 from sys import argv
@@ -7,24 +8,15 @@ import os
 
 listfile = []
 try:
-    if argv[1] == "bulk":
+    toPlot = argv[1]
+    if toPlot == "bulk":
         for file in os.listdir("results"):
             listfile.append("results/" + file)
+    if toPlot == "variation":
+        listfile.append("results/de_variation.dat")
     else:
-        try:
-            i = int(argv[1])
-            if i < 10:
-                with open(f"results/Wavefunction_ {i}.txt"):
-                    listfile = [f"results/Wavefunction_ {i}.txt"]
-            else:
-                with open(f"results/Wavefunction_{i}.txt"):
-                    listfile = [f"results/Wavefunction_{i}.txt"]
-        except:
-            pass
+        raise
 except:
-    pass
-
-if listfile == []:
     try:
         with open("results/Wavefunction.txt"):
             listfile = ["results/Wavefunction.txt"]
@@ -35,11 +27,12 @@ if listfile == []:
 # , y_axis_type="log"
 color=["red","orange","yellow","green","blue","purple","pink"]
 for i, filename in enumerate(listfile):
-    p = figure(title="Wavefunction", sizing_mode="stretch_both", y_axis_label='Psy (r)', x_axis_label='r')
+    if toPlot == "variation":
+        p = figure(title="Variation of de", sizing_mode="stretch_both", y_axis_label='de', x_axis_label='e')
+    else:
+        p = figure(title="Wavefunction", sizing_mode="stretch_both", y_axis_label='Psy (r)', x_axis_label='r')
     
     line_color = color[i%7]
-    x = None
-    y = None
     x = []
     y = []
     N = 0
@@ -59,12 +52,18 @@ for i, filename in enumerate(listfile):
             y.append(float(newValues[1]))
             N += 1
         
-    #, sizing_mode="stretch_both", height=800
-    if filename == "results/Wavefunction.txt":
-        p.line(x, y, line_color="red", line_width=2)
+    
+    if toPlot == "variation":
+        t = zip(x,y)
+        t = sorted(t)
+        t = zip(*t)
+        x,y = [a for a in t]
+        p.circle(x, y, line_color="blue", line_width=2)
+        p.line(x, y, line_color="black", line_width=1)
+        p.add_tools(pltm.HoverTool())
+        output_file(filename="results/variation.html")
     else:
-        p.line(x, y, legend_label="v=" + filename.replace(" ","").replace("results/Wavefunction_","").replace(".txt",""), line_color="red", line_width=2)
-    #color[i%7]
+        p.line(x, y, line_color="red", line_width=2)
+        output_file(filename="results/wavefunction_plotted.html")
     bokeh.io.save(p)
-    output_file(filename="wavefunction_plotted.html")
     show(p)

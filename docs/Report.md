@@ -171,3 +171,18 @@ In order to have a huge amount of iteration, I use -0.78 as starting energy
 
 The results are not at all what I expected, but it appear that I misunderstood the role of $\epsilon$. I thook it was a precision parameter, but it is actually just a value that is used to increase the wavefunction when we start to make the shooting method. So, giving that fact that we make the wave propagate from the 2 sides and we normalize it after with a coefficient that allow to perfrectly match the 2 propagations, at the end, the epsilon coefficient does not change anything. It only change the flatnesse of the wave that is drawed by the shooting methode before the normalisation. So in the end, we can see that this coefficient as no effect here.
 
+## 4) To understand the reason, plot a graph of variation of $\delta e$ as a function of $e$ for e
+
+Theoritically, we expect this behavior:
+
+![](images/4-theory.png)
+
+In practice, we can see this behavior:
+
+![](images/4-variation_of_de.png)
+
+We retrieve the oscillation that are decresing in amplitude in function of $e$. However, we see that there is some jumps, corresponding to points where the convergeance node (vibrational level) change.
+
+We can also see that ths intersection correspond to the energy of the vibrational levels. For exemple, here is the first node, that have an energy of $-0.9473$:
+
+![](images/4-hover.png)
