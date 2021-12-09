@@ -17,6 +17,7 @@ try:
     else:
         raise
 except:
+    toPlot = ""
     try:
         with open("results/Wavefunction.txt"):
             listfile = ["results/Wavefunction.txt"]
@@ -61,7 +62,6 @@ for i, filename in enumerate(listfile):
         p.circle(x, y, line_color="blue", line_width=2)
         p.line(x, y, line_color="black", line_width=1)
         p.add_tools(pltm.HoverTool())
-        output_file(filename="results/variation.html")
     else:
         p.line(x, y, line_color="red", line_width=2)
         output_file(filename="results/wavefunction_plotted.html")

@@ -4,12 +4,13 @@ program schro
     INTEGER (KIND=4), PARAMETER :: N=50
     INTEGER (KIND=4):: NCMAX, IFLAG, M, JLEV, NCOUNT, NODE,I 
     REAL (KIND=8), DIMENSION(0:N):: V,F,RR !! potential ; wave function ; abscissae
+    REAL (KIND=8), DIMENSION(0:N):: RV, VRV
     REAL (KIND=8):: R0,RN,A,B,EPS,TOL,FINIT,ENERG,H,HC,E,DE,step
     REAL :: plot = 1
     
     ! initialize the data
     DATA R0/0.1D0/, RN/2.6D0/, a/1.3924/, b/1.484D-03/, EPS/1.0D-10/, TOL/1.0D-04/,& 
-            FINIT/0.D0/, ENERG/-0.60D0/, NCMAX/30/, IFLAG/1/, M/11/, JLEV/0/ 
+            FINIT/0.D0/, ENERG/-0.96D0/, NCMAX/30/, IFLAG/1/, M/11/, JLEV/0/ 
 
     H=(RN-R0)/DFLOAT(N)  ! calculation of the step:
     HC=H*H/B ! expression h2/b !!just a constant to compute the wave function
@@ -30,19 +31,26 @@ program schro
 
     ! propagation; NCOUNT giving the number of iterations:
     
-    OPEN(UNIT=98,FILE="results/de_variation.dat")
-    ENERG = -0.98D0
-    do i=0,580
-        step = 1.0 / 1000.0
-        E = ENERG + step * i
-        print *, E
-        CALL SHOOT(N,HC,FINIT,EPS,E,V,F,NODE,DE,M,IFLAG) 
-        WRITE(98,99) E, DE
-        99 FORMAT(2E15.7) 
-    enddo
-    stop
 
-    !CALL SHOOT(N,HC,FINIT,EPS,E,V,F,NODE,DE,M,IFLAG) 
+
+    ! ### QUESTION 4 ###
+    !
+    !OPEN(UNIT=98,FILE="results/de_variation.dat")
+    !ENERG = -0.98D0
+    !do i=0,580
+    !    step = 1.0 / 1000.0
+    !    E = ENERG + step * i
+    !    print *, E
+    !    CALL SHOOT(N,HC,FINIT,EPS,E,V,F,NODE,DE,M,IFLAG) 
+    !    WRITE(98,99) E, DE
+    !    99 FORMAT(2E15.7) 
+    !enddo
+    !stop
+
+
+    
+
+    CALL SHOOT(N,HC,FINIT,EPS,E,V,F,NODE,DE,M,IFLAG) 
     NCOUNT=NCOUNT+1 
 
     WRITE(*,200) NCOUNT, E, M, DE, NODE 
@@ -66,6 +74,34 @@ program schro
         100 FORMAT(2E15.7) 
     ENDDO 
     CLOSE(1) 
+
+    
+
+
+    print *, "RR -----------------"
+    print *, F
+    
+    print *, "F -----------------"
+    print *, RR
+
+    print *, "RV -----------------"
+    RV = dot_product(1/(RR*RR), F)
+    print *, RV
+
+    print *, "VRV -----------------"
+    VRV = dot_product(F, RV)
+    print *, VRV
+
+    print *, "BVRV -----------------"
+    !BVRV = B * VRV
+    print *, B * VRV
+
+    print *, "Voila -------------------"
+
+
+
+
+
 
     IF(plot == 1) THEN
         call execute_command_line('python3 plot.py')
