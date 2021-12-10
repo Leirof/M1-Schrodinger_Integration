@@ -1,26 +1,3 @@
-Numerical integration of the Schrödinger equation.
-===
-
-Vincent Foriel
----
-
-December 10, 2021
----
-
-# Table of Content
-- [Preparation](#preparation)
-- [Question 1](#question-1)
-- [Question 2](#question-2)
-- [Question 3](#question-3)
-  - [Influence of $r_0$](#influence-of-r_0)
-  - [Influence of $r_N$](#influence-of-r_n)
-  - [Influence of N](#influence-of-n)
-  - [Influence of $\epsilon$](#influence-of-epsilon)
-  - [Influence of $\tau$](#influence-of-tau)
-- [Question 4](#question-4)
-- [Question 5](#question-5)
-- [Conclusion](#conclusion)
-
 # Preparation
 
 We know that
