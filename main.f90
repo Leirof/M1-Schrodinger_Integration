@@ -3,14 +3,14 @@ program schro
     implicit none
     INTEGER (KIND=4), PARAMETER :: N=50
     INTEGER (KIND=4):: NCMAX, IFLAG, M, JLEV, NCOUNT, NODE,I 
-    REAL (KIND=8), DIMENSION(0:N):: V,F,RR !! potential ; wave function ; abscissae
+    REAL (KIND=8), DIMENSION(0:N):: V,F,RR, psi, B_v, psi0, cons, test !! potential ; wave function ; abscissae
     REAL (KIND=8), DIMENSION(0:N):: RV, VRV
-    REAL (KIND=8):: R0,RN,A,B,EPS,TOL,FINIT,ENERG,H,HC,E,DE,step
+    REAL (KIND=8):: R0,RN,A,B,EPS,TOL,FINIT,ENERG,H,HC,E,DE
     REAL :: plot = 1
     
     ! initialize the data
-    DATA R0/0.1D0/, RN/2.6D0/, a/1.3924/, b/1.484D-03/, EPS/1.0D-10/, TOL/1.0D-04/,& 
-            FINIT/0.D0/, ENERG/-0.96D0/, NCMAX/30/, IFLAG/1/, M/11/, JLEV/0/ 
+    DATA R0/0.1D0/, RN/2.6D0/, a/1.3924/, b/1.484D-03/, EPS/1.0D-10/, TOL/1.0D-17/,& 
+            FINIT/0.D0/, ENERG/-0.78D0/, NCMAX/30/, IFLAG/1/, M/11/, JLEV/0/ 
 
     H=(RN-R0)/DFLOAT(N)  ! calculation of the step:
     HC=H*H/B ! expression h2/b !!just a constant to compute the wave function
@@ -77,30 +77,49 @@ program schro
 
     
 
+    if(0 == 1) then
+        print *, "RR -----------------"
+        print *, F
+        
+        print *, "F -----------------"
+        print *, RR
 
-    print *, "RR -----------------"
-    print *, F
-    
-    print *, "F -----------------"
-    print *, RR
+        print *, "RV -----------------"
+        RV = dot_product(1/(RR*RR), F)
+        print *, RV
 
-    print *, "RV -----------------"
-    RV = dot_product(1/(RR*RR), F)
-    print *, RV
+        print *, "VRV -----------------"
+        VRV = dot_product(F, RV)
+        print *, VRV
 
-    print *, "VRV -----------------"
-    VRV = dot_product(F, RV)
-    print *, VRV
+        print *, "BVRV -----------------"
+        !BVRV = B * VRV
+        print *, B * VRV
 
-    print *, "BVRV -----------------"
-    !BVRV = B * VRV
-    print *, B * VRV
+        print *, "Voila -------------------"
 
-    print *, "Voila -------------------"
+        do I=1,N
+            PSI0 = PSI0 + F(I) * F(I)
+        end do
 
+        CONS = 1/sqrt(PSI0)
+        PSI = F*CONS
 
+        test = 0
+        do I=1,N
+            test = test + PSI(I) * PSI(I)
+        end do
+        print *, "Idiot test, P= ", test
 
+        B_v = 0
+        do i=1,N
+            B_v = B_v + psi(i) * psi(i) / RR(i)**2
+        end do
 
+        B_v = B*B_v
+
+        print *,"B_v = ", B_v
+    endif
 
 
     IF(plot == 1) THEN

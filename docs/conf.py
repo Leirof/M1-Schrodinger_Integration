@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Test docs'
+project = 'Schrodinger Integration'
 copyright = '2021, Vincent Foriel'
 author = 'Vincent Foriel'
 

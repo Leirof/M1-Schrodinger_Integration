@@ -1,3 +1,25 @@
+Schrodinger Integration
+===
+
+Vincent Foriel
+---
+
+December 10, 2021
+---
+
+# Table of Content
+- [Preparation](#preparation)
+- [Question 1](#question-1)
+- [Question 2](#question-2)
+- [Question 3](#question-3)
+  - [Influence of $r_0$](#influence-of-r_0)
+  - [Influence of $r_N$](#influence-of-r_n)
+  - [Influence of N](#influence-of-n)
+  - [Influence of $\epsilon$](#influence-of-epsilon)
+  - [Influence of $\tau$](#influence-of-tau)
+- [Question 4](#question-4)
+- [Question 5](#question-5)
+
 # Preparation
 
 We know that
@@ -39,22 +61,30 @@ $$
 While trying to run the program with $e <= -0.97$, I obtain wrong convergeance. With upper starting energy, I converge to good vibrational levels:
 
 
-| Starting energy | Convergeance node ($v$) | Node energy |
-| ----------------- | ------------------------- | ------------- |
-| -0.96           | 0                       | -0.9473     |
-| -0.89           | 1                       | -0.8470     |
-| -0.77           | 2                       | -0.7529     |
-| -0.68           | 3                       | -0.6653     |
-| -0.60           | 4                       | -0.5836     |
-| -0.53           | 5                       | -0.5079     |
-| -0.45           | 6                       | -0.4378     |
-| -0.38           | 7                       | -0.3732     |
-| -0.34           | 8                       | -0.3317     |
+| Starting energy | Convergeance node ($v$) | Node energy | Theoritical energies |
+| ----------------- | ------------------------- | ------------- | ---------------------- |
+| -0.96           | 0                       | -0.9473     | -0.9471              |
+| -0.89           | 1                       | -0.8470     | -0.8456              |
+| -0.77           | 2                       | -0.7529     | -0.7498              |
+| -0.68           | 3                       | -0.6653     | -0.6598              |
+| -0.60           | 4                       | -0.5836     | -0.5755              |
+| -0.53           | 5                       | -0.5079     | -0.4970              |
+| -0.45           | 6                       | -0.4378     | -0.4243              |
+| -0.38           | 7                       | -0.3732     | -0.3573              |
+| -0.34           | 8                       | -0.3317     | -0.2960              |
+
+The theoritical energies was computed thanks to the following formula:
+
+$$
+e_n = -[1 - a \sqrt{b} (n + 1/2)]^2
+
+$$
+
+We can see that the program is loosing in precision when we converge to high vibrational level.
 
 
-|                    |                    |                    |
-| -------------------- | -------------------- | -------------------- |
 | ![](images/v0.png) | ![](images/v1.png) | ![](images/v2.png) |
+| -------------------- | -------------------- | -------------------- |
 | ![](images/v3.png) | ![](images/v4.png) | ![](images/v5.png) |
 | ![](images/v6.png) | ![](images/v7.png) | ![](images/v8.png) |
 
@@ -106,20 +136,22 @@ I expect that if $r_0$ is too high, I will have wrong results because the progra
 
 For energy starting at -0.85
 
-| $r_0$       | 0.1     | 0.3     | 0.5     | 0.7     | 0.9     | 1.1     | 
-| ---         | ---     | ---     | ---     | ---     | ---     | ---     |
-| Iterations  | 2       | 2       | 2       | 5       | 5       | 4       | 
-| Ending node | 1       | 1       | 1       | 1       | 0       | 0       |
-| Energy      | -0.8470 | -0.8468 | -0.8465 | -0.8393 | -0.9096 | -0.8108 |
+
+| $r_0$       | 0.1                             | 0.3                             | 0.5                             | 0.7                             | 0.9                             | 1.1                             |
+| ------------- | --------------------------------- | --------------------------------- | --------------------------------- | --------------------------------- | --------------------------------- | --------------------------------- |
+| Iterations  | 2                               | 2                               | 2                               | 5                               | 5                               | 4                               |
+| Ending node | 1                               | 1                               | 1                               | 1                               | 0                               | 0                               |
+| Energy      | -0.8470                         | -0.8468                         | -0.8465                         | -0.8393                         | -0.9096                         | -0.8108                         |
 | Plot        | ![](images/3-E=0.85,R0=0.1.png) | ![](images/3-E=0.85,R0=0.3.png) | ![](images/3-E=0.85,R0=0.5.png) | ![](images/3-E=0.85,R0=0.7.png) | ![](images/3-E=0.85,R0=0.9.png) | ![](images/3-E=0.85,R0=1.1.png) |
 
 For energy starting at -0.78:
 
-| $r_0$       | 0.1     | 0.3     | 0.5     | 0.7     | 0.9     | 1.1     | 
-| ---         | ---     | ---     | ---     | ---     | ---     | ---     |
-| Iterations  | 7       | 4       | 5       | 10      | 3       | 4       | 
-| Ending node | 1       | 2       | 2       | 2       | 1       | 0       |
-| Energy      | -0.8469 | -0.7524 | -0.7519 | -0.7368 | -0.7754 | -0.8108 |
+
+| $r_0$       | 0.1                             | 0.3                             | 0.5                             | 0.7                             | 0.9                             | 1.1                             |
+| ------------- | --------------------------------- | --------------------------------- | --------------------------------- | --------------------------------- | --------------------------------- | --------------------------------- |
+| Iterations  | 7                               | 4                               | 5                               | 10                              | 3                               | 4                               |
+| Ending node | 1                               | 2                               | 2                               | 2                               | 1                               | 0                               |
+| Energy      | -0.8469                         | -0.7524                         | -0.7519                         | -0.7368                         | -0.7754                         | -0.8108                         |
 | Plot        | ![](images/3-E=0.78,R0=0.1.png) | ![](images/3-E=0.78,R0=0.3.png) | ![](images/3-E=0.78,R0=0.5.png) | ![](images/3-E=0.78,R0=0.7.png) | ![](images/3-E=0.78,R0=0.9.png) | ![](images/3-E=0.78,R0=1.1.png) |
 
 We can see that if we choose r0 to close to the "begining" of the wavefunction (it means that if r0 is placed where our vibrational energy is upper than the potential), the result will be at least not accurate and may be totally wrong, just giving other vibrational level with not accurate associated enery.
@@ -132,11 +164,12 @@ We can see that if we choose r0 to close to the "begining" of the wavefunction (
 
 I expect a similar result as for $r_0$ influence.
 
-| $r_N$       | 2.6     | 2.3     | 2.0     | 1.7     | 1.4     | 1.1     | 
-| ---         | ---     | ---     | ---     | ---     | ---     | ---     |
-| Iterations  | 2       | 2       | 2       | 2       | 3       | 3       | 
-| Ending node | 1       | 1       | 1       | 1       | 1       | 0       |
-| Energy      | -0.8470 | -0.8466 | -0.8464 | -0.8460 | -0.9326 | -0.8856 |
+
+| $r_N$       | 2.6                             | 2.3                             | 2.0                             | 1.7                             | 1.4                             | 1.1                             |
+| ------------- | --------------------------------- | --------------------------------- | --------------------------------- | --------------------------------- | --------------------------------- | --------------------------------- |
+| Iterations  | 2                               | 2                               | 2                               | 2                               | 3                               | 3                               |
+| Ending node | 1                               | 1                               | 1                               | 1                               | 1                               | 0                               |
+| Energy      | -0.8470                         | -0.8466                         | -0.8464                         | -0.8460                         | -0.9326                         | -0.8856                         |
 | Plot        | ![](images/3-E=0.85,RN=2.6.png) | ![](images/3-E=0.85,RN=2.3.png) | ![](images/3-E=0.85,RN=2.0.png) | ![](images/3-E=0.85,RN=1.7.png) | ![](images/3-E=0.85,RN=1.4.png) | ![](images/3-E=0.85,RN=1.1.png) |
 
 As I expected, we have almost the same behavior: the more we reduce $r_N$, the more we lose in precision, until a certain point where the program is not able anymore to converge to the good node.
@@ -145,11 +178,12 @@ As I expected, we have almost the same behavior: the more we reduce $r_N$, the m
 
 I expect that N will result in a lack of precision in determination of energy, and maybe cause problem of convergeance if the N is to low and don't allow to distinguish 2 waves.
 
-| N           | 50      | 40      | 30      | 20      | 10      | 3       | 
-| ---         | ---     | ---     | ---     | ---     | ---     | ---     |
-| Iterations  | 2       | 2       | 2       | 2       | 12      | 2       | 
-| Ending node | 1       | 1       | 1       | 1       | 1       | 1       |
-| Energy      | -0.8470 | -0.8477 | -0.8494 | -0.8545 | -0.8891 | -0.5652 |
+
+| N           | 50                            | 40                            | 30                            | 20                            | 10                            | 3                            |
+| ------------- | ------------------------------- | ------------------------------- | ------------------------------- | ------------------------------- | ------------------------------- | ------------------------------ |
+| Iterations  | 2                             | 2                             | 2                             | 2                             | 12                            | 2                            |
+| Ending node | 1                             | 1                             | 1                             | 1                             | 1                             | 1                            |
+| Energy      | -0.8470                       | -0.8477                       | -0.8494                       | -0.8545                       | -0.8891                       | -0.5652                      |
 | Plot        | ![](images/3-E=0.85,N=50.png) | ![](images/3-E=0.85,N=40.png) | ![](images/3-E=0.85,N=30.png) | ![](images/3-E=0.85,N=20.png) | ![](images/3-E=0.85,N=10.png) | ![](images/3-E=0.85,N=3.png) |
 
 As I expected, it has a huge influence on the precision on the obtained level energy, but I didn't expected a such impact on the number of iteration that we can see for N = 10. Also, I'm surprised to see that, even if the curve show only 1/2 "period", so like the wavefunction corresponding to v=0, it still makes the distinction and know that this is v=1
@@ -160,14 +194,27 @@ I expect that $\epsilon$ will have a huge impact on the number of iteration and,
 
 In order to have a huge amount of iteration, I use -0.78 as starting energy
 
-| $\epsilon$  | $10^{0}$|$10^{-2}$|$10^{-4}$|$10^{-6}$|$10^{-8}$|$10^{-10}$| 
-| ---         | ---     | ---     | ---     | ---     | ---     | ---     |
-| Iterations  | 7       | 7       | 7       | 7       | 7       | 7       | 
-| Ending node | 1       | 1       | 1       | 1       | 1       | 1       |
-| Energy      | -0.8470 | -0.8470 | -0.8470 | -0.8470 | -0.8470 | -0.8470 |
+
+| $\epsilon$  | $10^{0}$                      | $10^{-2}$                     | $10^{-4}$                     | $10^{-6}$                     | $10^{-8}$                     | $10^{-10}$                   |
+| ------------- | ------------------------------- | ------------------------------- | ------------------------------- | ------------------------------- | ------------------------------- | ------------------------------ |
+| Iterations  | 7                             | 7                             | 7                             | 7                             | 7                             | 7                            |
+| Ending node | 1                             | 1                             | 1                             | 1                             | 1                             | 1                            |
+| Energy      | -0.8470                       | -0.8470                       | -0.8470                       | -0.8470                       | -0.8470                       | -0.8470                      |
 | Plot        | ![](images/3-E=0.85,N=50.png) | ![](images/3-E=0.85,N=40.png) | ![](images/3-E=0.85,N=30.png) | ![](images/3-E=0.85,N=20.png) | ![](images/3-E=0.85,N=10.png) | ![](images/3-E=0.85,N=3.png) |
 
 The results are not at all what I expected, but it appear that I misunderstood the role of $\epsilon$. I thook it was a precision parameter, but it is actually just a value that is used to increase the wavefunction when we start to make the shooting method. So, giving that fact that we make the wave propagate from the 2 sides and we normalize it after with a coefficient that allow to perfrectly match the 2 propagations, at the end, the epsilon coefficient does not change anything. It only change the flatnesse of the wave that is drawed by the shooting methode before the normalisation. So in the end, we can see that this coefficient as no effect here.
+
+## Influence of $\tau$
+
+$\tau$ is representing the tolerence of $|\delta e / e|$. Sp I guesse that reducing $\tau$ will increase the number of iterations, but it will not impact the final wevefunction in a significant way.
+
+
+| $\tau$       | $10^{0}$                          | $10^{-2}$                         | $10^{-4}$                         | $10^{-6}$                         | $10^{-8}$                         |
+| -------------- | ----------------------------------- | ----------------------------------- | ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| Iteration    | 1                                 | 1                                 | 7                                 | 8                                 | 9                                 |
+| Wavefunction | ![](images/3-E=0.75,Tau=10-0.png) | ![](images/3-E=0.75,Tau=10-0.png) | ![](images/3-E=0.75,Tau=10-4.png) | ![](images/3-E=0.75,Tau=10-4.png) | ![](images/3-E=0.75,Tau=10-4.png) |
+
+As expected, increasing the value of $\tau$ increase the number of iteration and do not change significantly the final wavefunction. However, it changes de wavefunction significantly when we put $\tau=10^{-2}$ and upper. Moreover, below $\tau=10^{-8}$, the number of iteration doesn't change until $\tau=10^{-17}$ where the program can't converge anymore.
 
 # Question 4
 
@@ -183,7 +230,12 @@ We retrieve the oscillation that are decresing in amplitude in function of $e$. 
 
 We can also see that ths intersection correspond to the energy of the vibrational levels. For exemple, here is the first node, that have an energy of $-0.9473$:
 
-![Test caption](images/4-hover.png)
+![](images/4-hover.png)
 
 # Question 5
 
+$$
+
+
+
+$$
