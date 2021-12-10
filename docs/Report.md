@@ -1,4 +1,4 @@
-Schrodinger Integration
+Numerical integration of the Schrödinger equation.
 ===
 
 Vincent Foriel
@@ -19,6 +19,7 @@ December 10, 2021
   - [Influence of $\tau$](#influence-of-tau)
 - [Question 4](#question-4)
 - [Question 5](#question-5)
+- [Conclusion](#conclusion)
 
 # Preparation
 
@@ -234,8 +235,40 @@ We can also see that ths intersection correspond to the energy of the vibrationa
 
 # Question 5
 
+We want to compute $B_0$ and $B_1$. We know that
+$$
+B_{\mathrm{v}} \equiv B\left\langle\mathrm{v}\left|\frac{R_{0}^{2}}{R^{2}}\right| \mathrm{v}\right\rangle,
 $$
 
-
+and we use here the reduced variable
 
 $$
+r = R / R_0.
+$$
+
+So it is equivalent to compute
+
+$$
+\int_{0}^{\infty} \widetilde{\psi}_{n}(r)^* \widetilde{\psi}_{n}(r) \frac{1}{r^{2}} d r
+$$
+
+where $\widetilde{\psi}_{n}$ represent the normalized wavefunction at the n-th vibrational level:
+
+$$
+\widetilde{\psi}_{n} = \frac{\psi(x)_n}{\sqrt{\int\psi(x)^{2}_n dr}}.
+$$
+
+So if we compute that, we obtain:
+
+$$
+B0 = 59.826
+$$
+$$
+B1 = 57.749
+$$
+
+> After several tentatives to make it in Fortran, I finally made it in python using a lib designed to make integrations.
+
+# Conclusion
+
+We saw that the shooting method allow to perform the computation of the vibrational levels and there associated wavefunctions and energy. We also saw the limitations of this algorithm and the parameters that allow to get the best results.
